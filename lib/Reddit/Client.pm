@@ -53,6 +53,7 @@ use constant API_SUBREDDITS     => 11;
 use constant API_LINKS_FRONT    => 12;
 use constant API_LINKS_OTHER    => 13;
 use constant API_DEL            => 14;
+use constant API_USER           => 15;
 
 use constant SUBREDDITS_HOME    => '';
 use constant SUBREDDITS_MINE    => 'mine';
@@ -61,11 +62,20 @@ use constant SUBREDDITS_NEW     => 'new';
 use constant SUBREDDITS_CONTRIB => 'contributor';
 use constant SUBREDDITS_MOD     => 'moderator';
 
+use constant USER_ABOUT         => 'about';
+use constant USER_OVERVIEW      => 'overview';
+use constant USER_SUBMITTED     => 'submitted';
+use constant USER_COMMENTS      => 'comments';
+use constant USER_LIKED         => 'liked';
+use constant USER_DISLIKED      => 'disliked';
+use constant USER_HIDDEN        => 'hidden';
+use constant USER_SAVED         => 'saved';
+
 #===============================================================================
 # Parameters
 #===============================================================================
 
-our $DEBUG           = 0;
+our $DEBUG           = 1;
 our $BASE_URL        = 'http://www.reddit.com';
 our $UA              = sprintf 'Reddit::Client/%f', $VERSION;
 
@@ -85,6 +95,7 @@ $API[API_SUBREDDITS ] = ['GET',  '/reddits/%s'    ];
 $API[API_LINKS_OTHER] = ['GET',  '/%s'            ];
 $API[API_LINKS_FRONT] = ['GET',  '/r/%s/%s'       ];
 $API[API_DEL        ] = ['POST', '/api/del'       ];
+$API[API_USER       ] = ['GET',  '/user/%s/%s'    ];
 
 #===============================================================================
 # Package routines
