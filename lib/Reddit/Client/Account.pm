@@ -8,24 +8,35 @@ require Reddit::Client::Thing;
 require Reddit::Client;
 
 use base   qw/Reddit::Client::Thing/;
-use fields qw/has_mail created modhash created_utc link_karma
-              comment_karma is_gold is_mod has_mod_mail
-			  has_verified_email is_friend over_18/;
+use fields qw/
+	comment_karma 
+	created 
+	created_utc 
+	has_mail 
+	has_mod_mail
+	has_verified_email 
+	is_friend 
+	is_gold 
+	is_mod 
+	link_karma
+	modhash 
+	over_18
+/;
 
 			  
 			  
-sub saved {
-	my $self = shift;
-	
-	my $result = $self->{session}->api_json_request(api => Reddit::Client::API_USER, 
-											args => [$self->{name}, Reddit::Client::USER_SAVED]);
-
-	return {
-		before => $result->{data}{before},
-		after  => $result->{data}{after},
-        items  => [ map {Reddit::Client::Link->new($self->{session}, $_->{data})} @{$result->{data}{children}} ],
-    };
-}
+#sub saved {
+#	my $self = shift;
+#	
+#	my $result = $self->{session}->api_json_request(api => Reddit::Client::API_USER, 
+#											args => [$self->{name}, Reddit::Client::USER_SAVED]);
+#
+#	return {
+#		before => $result->{data}{before},
+#		after  => $result->{data}{after},
+#        items  => [ map {Reddit::Client::Link->new($self->{session}, $_->{data})} @{$result->{data}{children}} ],
+#    };
+#}
 
 1;
 

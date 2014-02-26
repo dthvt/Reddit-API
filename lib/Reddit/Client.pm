@@ -367,6 +367,46 @@ sub home_subreddits    { return $_[0]->list_subreddits(SUBREDDITS_HOME)    }
 sub popular_subreddits { return $_[0]->list_subreddits(SUBREDDITS_POPULAR) }
 sub new_subreddits     { return $_[0]->list_subreddits(SUBREDDITS_NEW)     }
 
+sub get_user {
+    my $self = shift;
+    my $user = shift or die "Requires username as an argument";
+    DEBUG('Request info about a user $user');
+    my $result = $self->api_json_request(api => API_USER, args => [$user, USER_ABOUT]);
+    return Reddit::Client::Account->new($self, $result->{data});
+}
+
+sub get_saved {
+    my ($self, %params) = @_;
+    my $before = $params{before};
+    my $after = $params{after};
+    my $limit = $params{limit} || DEFAULT_LIMIT;
+
+    $self->require_login;
+    my $user = $self->me;
+
+    DEBUG('Fetch %d saved link(s): %s?before=%s&after=%s', $limit, $user->{name}, ($before || '-'), ($after || '-'));
+
+    my $query = {};
+    $query->{limit}  = $limit  if defined $limit;
+    $query->{before} = $before if defined $before;
+    $query->{after}  = $after  if defined $after;
+
+    my $result = $self->api_json_request(
+        api => API_USER, 
+        args => [
+		$user->{name},
+		USER_SAVED,
+        ],
+        data => $query,
+    );
+
+    return {
+        before => $result->{before},
+        after => $result->{after},
+        items => [ map { Reddit::Client::Link->new($self, $_->{data})} @{$result->{data}{children}} ],
+    };
+}
+
 #===============================================================================
 # Finding subreddits and listings
 #===============================================================================
