@@ -401,8 +401,8 @@ sub get_saved {
     );
 
     return {
-        before => $result->{before},
-        after => $result->{after},
+        before => $result->{data}{before},
+        after => $result->{data}{after},
         items => [ map { Reddit::Client::Link->new($self, $_->{data})} @{$result->{data}{children}} ],
     };
 }
